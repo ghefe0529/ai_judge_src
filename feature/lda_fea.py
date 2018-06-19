@@ -7,9 +7,10 @@ from gensim.models.tfidfmodel import TfidfModel
 import numpy as np
 
 common_path = r'../../'
+common_path = r'D:/gh'
 
-id_content_path = common_path + r'data/corpus/output/id_context.csv'
-id_context_lda_path = common_path + r'data/feature/id_context_lda.csv'
+id_content_path = common_path + r'/data/corpus/output/id_content.csv'
+id_content_lda_path = common_path + r'/data/feature/id_content_lda.csv'
 def get_lda_feacture_name(size):
     names = []
     for i in range(size):
@@ -18,7 +19,7 @@ def get_lda_feacture_name(size):
 
 def get_lda_feature():
     doc_train = pd.read_csv(id_content_path)
-    documents = doc_train['context'].apply(lambda x: x.split(' '))
+    documents = doc_train['content'].apply(lambda x: x.split(' '))
 #    建立词和ID的映射字典(id:word)
     dictionary = corpora.Dictionary(documents)
 #    建立文档和id和list(tuple(id,num)) of list df
@@ -28,7 +29,7 @@ def get_lda_feature():
 #    获取文档的tdf获取文档tfidf
     ds_tfidf = tfidf_model[ds_df]
 #    定义文档的主题个数
-    n = 50
+    n = 60
 #    构建lda模型，输入参数是文档的tfidf，并指明主题的个数
     lda_model = LdaModel(ds_tfidf, num_topics=n, passes=10, random_state=12)
     vec_size = (len(documents),n)
@@ -44,7 +45,7 @@ def get_lda_feature():
         i += 1
         
     f_names = get_lda_feacture_name(n)
-    pd.DataFrame(lda_feature, columns=f_names).to_csv(id_context_lda_path, index=0)
+    pd.DataFrame(lda_feature, columns=f_names).to_csv(id_content_lda_path, index=0)
     
     
 get_lda_feature()

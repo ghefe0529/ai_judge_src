@@ -10,29 +10,28 @@ from gensim.models import Doc2Vec
 from gensim.models.doc2vec import TaggedLineDocument
 from collections import defaultdict
 
-common_path = r'../..'
-common_path = r'D:/gh/ai_judge' 
-common_path = r'drive/Colab_Notebooks/ai_judge' 
+# common_path = r'../..'
+common_path = r'D:/gh' 
+# common_path = r'drive/Colab_Notebooks/ai_judge' 
 
-only_context_path = common_path + r'/data/corpus/output/only_context.txt'
-only_context_test_path = common_path + r'/data/corpus/output/only_context_test.txt'
+only_content_path = common_path + r'/data/corpus/output/only_content.txt'
+only_content_test_path = common_path + r'/data/corpus/output/only_content_test.txt'
 
 doc2Vec_model_path = common_path + r'/data/model/doc2Vec.model'
 
-id_context_path = common_path + r'/data/corpus/output/id_context.csv'
-id_context_d2v_path = common_path + r'/data/feature/id_context_d2v.csv'
-id_context_d2v_doc_path = common_path + r'/data/feature/id_context_d2v_doc.csv'
+id_content_path = common_path + r'/data/corpus/output/id_content.csv'
+id_content_d2v_path = common_path + r'/data/feature/id_content_d2v.csv'
+id_content_d2v_doc_path = common_path + r'/data/feature/id_content_d2v_doc.csv'
 
-id_context_test_path = common_path + r'/data/corpus/output/id_context_test.csv'
-id_context_d2v_test_path = common_path + r'/data/feature/id_context_d2v_test.csv'
-id_context_d2v_doc_test_path = common_path + r'/data/feature/id_context_d2v_doc_test.csv'
+id_content_test_path = common_path + r'/data/corpus/output/test.csv'
+id_content_d2v_test_path = common_path + r'/data/feature/id_content_d2v_test.csv'
+id_content_d2v_doc_test_path = common_path + r'/data/feature/id_content_d2v_doc_test.csv'
 
 def build_doc2Vec_model():
     '''
     建立doc2Vec模型
     '''
-    texts = TaggedLineDocument(only_context_path)
-    print(len(texts))
+    texts = TaggedLineDocument(only_content_path)
 
     print('----------doc2Vec model is building----------')
     # print('texts type is ',type(texts))
@@ -81,19 +80,23 @@ def doc2Vec_handle_data_two(size_begin, size_end, save_path):
     model = Doc2Vec.load(doc2Vec_model_path)
 #    print(model.docvecs[0])
     d2v_feat = list()
-    for i in range(len(size_begin,size_end)):
+    for i in range(size_begin,size_end):
         d2v_feat.append(model.docvecs[i])
+    print('shape is ', len(d2v_feat))
     pd.DataFrame(d2v_feat).to_csv(save_path,index=0)
 
+
 if __name__ == '__main__':
+    # 训练模型
+    # build_doc2Vec_model()
     # 训练集
-    content = pd.read_csv(id_context_path)['context']
-    build_doc2Vec_model()
-    doc2Vec_handle_data(content, id_context_d2v_path)
-    doc2Vec_handle_data_two(0, len(content),id_context_d2v_doc_path)
+    content = pd.read_csv(id_content_path)['content']
+    # doc2Vec_handle_data(content, id_content_d2v_path)
+    # doc2Vec_handle_data_two(0, len(content),id_content_d2v_doc_path)
     # 测试集
-    content_test = pd.read_csv(id_context_test_path)['context']
-    build_doc2Vec_model()
-    doc2Vec_handle_data(content, id_context_d2v_test_path)
-    doc2Vec_handle_data_two(len(content),len(content_test),id_context_d2v_doc_test_path)
+    content_test = pd.read_csv(id_content_test_path)['content']
+    # build_doc2Vec_model()
+    # doc2Vec_handle_data(content, id_content_d2v_test_path)
+    print(len(content),len(content_test))
+    doc2Vec_handle_data_two(len(content),len(content)+len(content_test),id_content_d2v_doc_test_path)
     print("---------------------------------finish---------------------------------------")

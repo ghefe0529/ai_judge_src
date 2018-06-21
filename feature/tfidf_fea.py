@@ -12,8 +12,9 @@ from sklearn.naive_bayes import  GaussianNB,MultinomialNB,BernoulliNB
 from sklearn.linear_model import LogisticRegression,Lasso,LinearRegression
 from sklearn.feature_selection import RFE
 
-common_path = r'../..'
-common_path = r'D:/gh/ai_judge'
+common_path = r'~/Documents/Study/Python/big_data/ai_judge'
+# common_path = r'D:/gh/ai_judge'
+# common_path = r'drive/Colab_Notebooks/ai_judge' 
 
 id_context_path = common_path + r'/data/corpus/output/id_content.csv'
 id_penalty_path = common_path + r'/data/corpus/output/id_penalty.csv'

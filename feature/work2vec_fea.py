@@ -10,14 +10,14 @@ from gensim.models import Word2Vec
 from gensim.models.word2vec import LineSentence
 from collections import defaultdict
 
-common_path = r'../..'
-common_path = r'D:/gh/ai_judge'
-common_path = r'drive/Colab_Notebooks/ai_judge' 
+common_path = r'~/Documents/Study/Python/big_data/ai_judge'
+# common_path = r'D:/gh/ai_judge'
+# common_path = r'drive/Colab_Notebooks/ai_judge' 
 
-word2Vec_model_path = r'../../data/model/word2Vec_2.model'
+word2Vec_model_path = common_path + r'/data/model/word2Vec_2.model'
 
-id_context_path = r'../../data/corpus/output/id_context.csv'
-id_context_w2v_path = r'../../data/feature/id_context_w2v.csv'
+id_context_path = common_path + r'/data/corpus/output/id_context.csv'
+id_context_w2v_path = common_path + r'/data/feature/id_context_w2v.csv'
 
 id_context_test_path = r'../../data/corpus/output/id_context_test.csv'
 id_context_w2v_test_path = r'../../data/feature/id_context_w2v_test.csv'

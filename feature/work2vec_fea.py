@@ -16,11 +16,11 @@ common_path = r'~/Documents/Study/Python/big_data/ai_judge'
 
 word2Vec_model_path = common_path + r'/data/model/word2Vec_2.model'
 
-id_context_path = common_path + r'/data/corpus/output/id_context.csv'
-id_context_w2v_path = common_path + r'/data/feature/id_context_w2v.csv'
+id_content_path = common_path + r'/data/corpus/output/id_content.csv'
+id_content_w2v_path = common_path + r'/data/feature/id_content_w2v.csv'
 
-id_context_test_path = r'../../data/corpus/output/id_context_test.csv'
-id_context_w2v_test_path = r'../../data/feature/id_context_w2v_test.csv'
+id_content_test_path = common_path + r'/data/corpus/output/test.csv'
+id_content_w2v_test_path = common_path + r'/data/feature/id_content_w2v_test.csv'
 
 
 def build_word2Vec_model(content):
@@ -31,11 +31,11 @@ def build_word2Vec_model(content):
             frequency[word] += 1
     texts = texts.apply(lambda words: [word for word in words if frequency[word] > 5])
 
-    print('--------------------')
+    print('---------build model begin-----------')
  
     model = Word2Vec(texts, size=100, window=5, iter=15, workers=12)
     model.save(word2Vec_model_path)
-    print('build model finish-------------------')
+    print('----------build model finish---------')
 
 def word2Vec_handle_data(content, n):
     # 去掉单词低于5个后的向量
@@ -62,14 +62,15 @@ def word2Vec_handle_data(content, n):
         i += 1
         if i%1200 == 0:
             print(i)
-    pd.DataFrame(w2v_feat_avg[:n]).to_csv(id_context_w2v_path, header=None, index=0)
-    pd.DataFrame(w2v_feat_avg[n:]).to_csv(id_context_w2v_test_path, header=None, index=0)
+    pd.DataFrame(w2v_feat_avg[:n]).to_csv(id_content_w2v_path, header=None, index=0)
+    pd.DataFrame(w2v_feat_avg[n:]).to_csv(id_content_w2v_test_path, header=None, index=0)
 
 if __name__ == '__main__':
-    content_train = pd.read_csv(id_context_path)['content']
+    content_train = pd.read_csv(id_content_path)['content']
     n = content_train.shape[0]
-    content_text = pd.read_csv(id_context_test_path)['content']
+    content_text = pd.read_csv(id_content_test_path)['content']
     content = pd.concat([content_train, content_text], axis=0)
-    build_word2Vec_model(content)
+    print('content shape is ', content.shape)
+    # build_word2Vec_model(content)
     word2Vec_handle_data(content, n)
     print("---------------------------------finish---------------------------------------")

@@ -22,7 +22,7 @@ fea_id_context_tfidf_loass_path = common_path + r'/data/feature/id_context_tfidf
 fea_id_context_tfidf_logistic_path = common_path + r'/data/feature/id_context_tfidf_logistic.csv'
 
 
-def select_coef_by_model(coef, data, min=0.01):
+def select_coef_by_model(coef, data, min=0.0001):
     del_weight = []
     for ele,index in zip(coef, range(len(coef))):
         if np.abs(ele) < min:
@@ -46,6 +46,7 @@ if __name__ == '__main__':
     '''
     使用逻辑回归训练模型对tfidf的特征降维
     '''
+    '''
     print(tfidf_data.shape)
     lgr = LogisticRegression()
     lgr.fit(tfidf_data,Y)
@@ -55,7 +56,7 @@ if __name__ == '__main__':
     x_new_train = pd.DataFrame(tfidf_new_data)
 
     x_new_train.to_csv(fea_id_context_tfidf_logistic_path, header=None, index=0)
-    
+    '''
     '''
     REF特征选择算法
     '''
@@ -67,20 +68,19 @@ if __name__ == '__main__':
     '''
     基于L1的特征选择
     '''
-
-
     # from sklearn.svm import LinearSVC
     from sklearn.linear_model import Lasso
-    from sklearn.datasets import load_iris
-    from sklearn.feature_selection import SelectFromModel
+    # from sklearn.datasets import load_iris
+    # from sklearn.feature_selection import SelectFromModel
 
-    print(tfidf_data.shape)
-    lasso = Lasso(alpha=0.0001)
+    print('tfidf begin :',tfidf_data.shape)
+    print('------lasso begin-----')
+    lasso = Lasso(alpha=0.001)
     lasso.fit(tfidf_data, Y)
+    print('lasso.coef_ len is ', len(lasso.coef_))
     tfidf_new = select_coef_by_model(lasso.coef_, tfidf_data.todense())
+    print('------lasso end-----')
+    print('tfidf end :',tfidf_new.shape)
 
-    print(tfidf_new.shape)
-    print(type(tfidf_new))
     tfidf_new = pd.DataFrame(tfidf_new)
-
     tfidf_new.to_csv(fea_id_context_tfidf_loass_path, header=None, index=0)
